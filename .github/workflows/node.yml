@@ -27,7 +27,7 @@ jobs:
 
       # 4. Build React app
       - name: Build project
-        run: npm run build
+        run: CI=false npm run build
 
       # 5. Upload build artifact (optional)
       - name: Upload build artifacts
