@@ -1,0 +1,39 @@
+name: React 17 Build
+
+on:
+  push:
+    branches: 
+             - main
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16.8'
+          cache: npm
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Build React app
+      - name: Build project
+        run: npm run build
+
+      # 5. Upload build artifact (optional)
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-build
+          path: |
+            build
+            dist
