@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve" width="512px" height="512px" class="hovered-paths"><g><g>
+	<g>
+		<g>
+			<path d="M0,48v416h512V48H0z M480,432H32v-96h448V432z M480,304H32v-96h448V304z M480,176H32V80h448V176z" data-original="#000000" class="hovered-path active-path" data-old_color="#000000" fill="#FFFFFF"/>
+			<rect x="64" y="112" width="32" height="32" data-original="#000000" class="hovered-path active-path" data-old_color="#000000" fill="#FFFFFF"/>
+			<rect x="160" y="112" width="288" height="32" data-original="#000000" class="hovered-path active-path" data-old_color="#000000" fill="#FFFFFF"/>
+			<rect x="160" y="240" width="288" height="32" data-original="#000000" class="hovered-path active-path" data-old_color="#000000" fill="#FFFFFF"/>
+			<rect x="160" y="368" width="288" height="32" data-original="#000000" class="hovered-path active-path" data-old_color="#000000" fill="#FFFFFF"/>
+			<rect x="64" y="240" width="32" height="32" data-original="#000000" class="hovered-path active-path" data-old_color="#000000" fill="#FFFFFF"/>
+			<rect x="64" y="368" width="32" height="32" data-original="#000000" class="hovered-path active-path" data-old_color="#000000" fill="#FFFFFF"/>
+		</g>
+	</g>
+</g></g> </svg>

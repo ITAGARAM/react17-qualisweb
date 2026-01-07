@@ -1,0 +1,233 @@
+/**Added by L.Subashini*/
+/* .product-title-sub {
+    font-size: 1.5rem;
+    font-weight: normal;
+    color: #97a0af;
+    margin-bottom: 0;
+    word-break: break-word;
+} */
+
+.btn-outlined {
+    padding: 0.20rem 0.8rem;
+    border-radius: 2rem;
+    border: 2px solid transparent;
+    text-transform: uppercase;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.outline-success {
+    border-color: rgba(47, 180, 125, 0.44);
+    color: #2fb47d;
+}
+
+.outline-success .fas {
+    color: #2fb47d;
+}
+
+.outline-success:hover {
+    color: #2fb47d;
+}
+
+.outline-blue {
+    border-color: rgba(0, 123, 255, 0.44); /* blue border */
+    color: #007bff; /* blue text */
+}
+
+.outline-blue .fas {
+    color: #007bff; /* blue icon */
+}
+
+.outline-blue:hover {
+    color: #007bff; /* keep blue on hover */
+}
+
+.outline-secondary {
+    border-color: rgba(151, 160, 175, 0.33);
+    color: #97a0af;
+}
+
+.outline-secondary:hover {
+    color: #97a0af;
+}
+
+.outline-danger {
+    border-color: rgba(228, 60, 60, 0.33);
+    color:#df5151;
+}
+.outline-danger:hover {
+    color:#df5151;
+}
+
+.InputGroupSplit{
+    background: none;
+    border: 0;
+}
+.ListCustomStyle{
+    border-color: var(--border-primary);
+    padding: 1.25rem 2rem;
+}
+.ActionIconColor{
+    border-color: #bbc2cb;
+    color: #d1d5dd;
+}
+.no-border{
+    border:0%!important
+}
+.left-card{
+    left:83%!important
+}
+.custom-padding{
+    padding: 0.85rem 1rem !important;
+}
+/**End*/
+/**Added by Perumalraj on 04-08-2020*/
+.outline-correction{
+    border-color: rgba(6, 83, 248, 0.918);
+    color: blue;
+}
+.outline-Final{
+    border-color: green;
+    color: green;
+}
+
+/*Added by Thanuja on 14-08-2020 for drag icon in test formula*/
+.dragicon {
+    color: #bbc2cb;
+}
+
+.dragicon:hover {
+    color: #007bff;
+}
+
+/*Added by Thanuja on 02-09-2020 for filter with accordian open(-) close(+) symbol*/
+.accordion-two .card-header.collapsed .card-title:after {
+    content: "\f067";
+}
+
+.accordion-two .card-header .card-title:after {
+    float: left;
+    content: '\f068';
+    font-family: 'Font Awesome 5 Free';
+    color: #4e607c;
+    margin-left: -10px;
+    margin-right: 10px;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.accordion-two>.card .card-header .card-title {
+    font-size: 14px;
+	text-transform:uppercase;
+	margin-bottom: 0;
+}
+
+.accordion-two>.card .card-header.collapsed .card-title {
+	font-weight:bold;
+}
+
+/* Added by Thanuja on 17-09-2020 to give background color for list master */
+.list-bgcolor {
+    background-color: #fcfdfd;
+}
+
+
+  /* .k-grid .k-grouping-row td div{
+      display: none !important;
+  } */
+  .react-confirm-alert-overlay{
+      z-index: 1100!important;;
+  }
+  .clock_marginstyle{
+      margin-top: 0.4em;
+  }
+  /* Added by Subashini for Organisation screen */
+  .mtop-5 {
+    margin-top: 5rem;
+}
+
+.react-tooltip{
+    z-index: 1100!important;
+}
+
+.outline-initiate {
+    border-color: rgba(33, 3, 179, 0.33);
+    color:#0505a0;
+}
+
+/*Added by Abdul for BGSi-72 ECatalogue Bar Charts*/
+/* ---------- Segmented toggle group styles ---------- */
+.segmented-toggle-group {
+  display: inline-flex;
+  border-radius: 8px;
+  overflow: hidden; /* keep it as one connected pill */
+  box-shadow: none;
+  border: 1px solid #dcdcdc;
+}
+
+/* Each button inside the segmented group */
+.segmented-toggle {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: #ffffff;
+  color: #3b3b3b;
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  transition: background 120ms ease, color 120ms ease;
+  width: 44px;
+  height: 36px;
+}
+
+/* remove default focus outline and add subtle focus ring */
+.segmented-toggle:focus {
+  box-shadow: 0 0 0 3px rgba(11,103,214,0.12);
+}
+
+/* Active button style (blue background / white icon) */
+.segmented-toggle.active {
+  background: #0b67d6; /* primary blue similar to your app */
+  color: #ffffff;
+}
+
+/* small separation border between items is handled by container border; no internal border */
+.segmented-toggle + .segmented-toggle {
+  border-left: 1px solid rgba(255,255,255,0.06); /* subtle separation if needed */
+}
+
+/* SVG icon sizing and color inherit */
+.segmented-toggle svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: currentColor;
+}
+
+/* Align the segmented group to the right and remove extra left gap from bootstrap rows */
+.modal-halfscreen .modal-body > .d-flex.justify-content-end {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* Make sure the button group doesn't push the content down — small vertical spacing only */
+.d-flex.justify-content-end.mb-2 {
+  margin-bottom: 8px;
+}
+
+/* Optional: if your DataGrid or other elements have top margin, reduce it to bring the grid up */
+.k-grid, .data-grid { /* tune selectors to your actual grid class if different */
+  margin-top: 0;
+}
+
+/* Small responsive tweak: if screen becomes narrow, keep buttons compact */
+@media (max-width: 576px) {
+  .segmented-toggle {
+    width: 40px;
+    padding: 6px 8px;
+  }
+}
+

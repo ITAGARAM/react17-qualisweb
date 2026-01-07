@@ -1,0 +1,1152 @@
+import React from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { injectIntl } from 'react-intl';
+import {
+    InputGroup, FormControl, Media, ListGroup, Form, Nav//, Col 
+} from 'react-bootstrap';
+import { ClientList, SearchAdd, MediaHeader, MediaSubHeader, MediaLabel, MediaSubHeaderText, SearchIcon, ContentPanel } from '../components/App.styles';
+import { ListMasterWrapper } from '../components/list-master/list-master.styles';
+import { getActionIcon } from '../components/HoverIcons';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import AdvFilter from './AdvFilter';
+import { toast } from 'react-toastify';
+import { getStatusIcon } from './StatusIcon'
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { checkBoxOperation, designProperties, transactionStatus } from './Enumeration';
+import QuickSearch from './QuickSearch';
+import FilterAccordion from './custom-accordion/filter-accordion.component';
+import '../pages/registration/registration.css'
+import { connect } from 'react-redux';
+import { ListView } from '@progress/kendo-react-listview';
+import { filterRecordBasedOnPrimaryKeyName, filterRecordBasedOnTwoArrays, filterStatusBasedOnSingleArray, filterStatusBasedOnTwoArrays, getSameRecordFromTwoArrays } from './CommonScript';
+import CustomPager from './CustomPager';
+
+
+// component commented by L.Subashini 13/12/2025 while upgrading to React 17
+//import ReactTooltip from 'react-tooltip';
+
+//component used by L.Subashini 13/12/2025 while upgrading to React 17 
+//import { Tooltip } from 'react-tooltip';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { //faBell, 
+    faChevronDown, faChevronUp, faExclamationCircle, faFilter, //faExclamationTriangle,
+    faSearch, faTimes
+} from '@fortawesome/free-solid-svg-icons';
+import CustomSwitch from './custom-switch/custom-switch.component';
+import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontIconWrap } from '../../src/components/data-grid/data-grid.styles';
+import { dynamicFileDownload } from '../../src/actions/ServiceAction';
+
+//import Iframe from 'react-iframe';
+//import useLongPress from "../actions/longPress";
+
+const mapStateToProps = (state) => {
+    return {
+        Login: state.Login
+    }
+}
+
+class TransationListMasterJsonView extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            showMore: {},
+            allFieldExpanded: false,
+            buttonCount: 4,
+            skip: 0,
+            take: this.props.Login.settings ? parseInt(this.props.Login.settings[3]) : 5,
+            info: true,
+            expandCheck: [],
+            scrollHeight: '100vh',
+            multipleselectionFlag: this.props.Login.settings && parseInt(this.props.Login.settings[7]) === 3 ? true : false,
+            showList: null,
+            disableClick: false,
+            showSearch: false,
+            // filterColumnActive: false
+        }
+    }
+
+    handlePageChange = e => {
+        this.setState({
+            skip: e.skip,
+            take: e.take
+        });
+        this.props.scrollChange()
+    };
+
+    filterColumn = (event) => {
+        let filterValue = event.target.value;
+        if (event.keyCode === 13) {
+            this.props.filterColumnData(filterValue, this.props.filterParam, this.props.searchListName, this.props.childTabsKey);
+        }
+    }
+    selectMultiple = (selectionKey, inputData) => {
+        let selectedArray = this.props.selectedMaster;
+
+        let dataList = [];
+        let removeElementFromArray = [];
+        // let MultipleSelectCount = this.props.Login.settings[3];
+        let masterList = this.props.masterList && this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take);
+
+        if (selectionKey === transactionStatus.ALL) {//Select All
+            let filteredList = filterRecordBasedOnPrimaryKeyName(masterList, this.props.primaryKeyField);
+            //let filteredList = filterRecordBasedOnTwoArrays(masterList, selectedArray, this.props.primaryKeyField);
+            // selectedArray=[];
+            // selectedArray = filteredList;
+            filteredList.map((item, index) => {
+                // if (index < this.state.take) {
+                //selectedArray.push(item)
+                dataList.push(item[this.props.primaryKeyField]);
+                // }
+                return null;
+            });
+
+            inputData[`${this.props.selectedListName}`] = filteredList
+            inputData[`${this.props.primaryKeyField}`] = dataList.join(",")
+            inputData[`${this.props.objectName}`] = filteredList;
+            // inputData["checkBoxOperation"] = 7;
+            inputData["checkBoxOperation"] = checkBoxOperation.QUICKSELECTALL;
+            inputData["childTabsKey"] = this.props.childTabsKey;
+            inputData["QuickSelectStatus"] = true;
+            if (dataList.length > 0) {
+                this.props.getMasterDetail(inputData, true, true);
+            }
+
+            // inputData[`${this.props.selectedListName}`] = selectedArray
+            // inputData[`${this.props.primaryKeyField}`] = dataList.join(",")
+            // inputData[`${this.props.objectName}`] = selectedArray;
+            // inputData["checkBoxOperation"] = 1;
+            // inputData["childTabsKey"] = this.props.childTabsKey;
+            // inputData["QuickSelectStatus"] = true;
+            // if (dataList.length > 0) {
+            //     this.props.getMasterDetail(inputData, true);
+            // }
+            // else {
+            //     toast.warn(this.props.intl.formatMessage({ id: "IDS_NOITEMSFOUND" }))
+            // }
+
+        } else if (selectionKey === transactionStatus.NA) {
+            let filteredList = getSameRecordFromTwoArrays(masterList, selectedArray, this.props.primaryKeyField);
+            if (filteredList.length > 0) {
+                if (selectedArray.length === filteredList.length) {
+                    selectedArray = [filteredList[0]];
+                    dataList = [selectedArray[0][this.props.primaryKeyField]];
+                } else {
+                    selectedArray = filterRecordBasedOnTwoArrays(selectedArray, masterList, this.props.primaryKeyField);
+                    dataList = [selectedArray[0][this.props.primaryKeyField]];
+                }
+                inputData[`${this.props.selectedListName}`] = selectedArray
+                inputData[`${this.props.primaryKeyField}`] = dataList.join(",")
+                inputData[`${this.props.objectName}`] = selectedArray;
+                //  inputData["checkBoxOperation"] = 6;
+                inputData["checkBoxOperation"] = checkBoxOperation.QUICKSELECTNONE;
+                inputData["childTabsKey"] = this.props.childTabsKey;
+                inputData["removeElementFromArray"] = filteredList;
+                inputData["statusNone"] = true;
+                if (dataList.length > 0) {
+                    this.props.getMasterDetail(inputData, false);
+                }
+            }
+
+        } else {//Select Status Wise
+            selectedArray = filterRecordBasedOnTwoArrays(selectedArray, masterList, this.props.primaryKeyField);
+
+            removeElementFromArray = getSameRecordFromTwoArrays(this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take), this.props.selectedMaster, this.props.primaryKeyField)
+            masterList.map((item) => {
+                // if (index < this.state.take) {
+                if (item[this.props.selectionField] === selectionKey) {
+                    selectedArray.push(item)
+                    dataList.push(item[this.props.primaryKeyField]);
+                }
+                return null;
+            });
+
+            // this.props.masterList && this.props.masterList.map((item) => {
+            //     if (item[this.props.selectionField] === selectionKey) {
+            //         selectedArray.push(item)
+            //         dataList.push(item[this.props.primaryKeyField]);
+            //     }
+            //     return null;
+            // })
+            inputData[`${this.props.selectedListName}`] = selectedArray
+            inputData[`${this.props.primaryKeyField}`] = dataList.join(",")
+            inputData[`${this.props.objectName}`] = selectedArray
+            // inputData["checkBoxOperation"] = 5;
+            inputData["checkBoxOperation"] = checkBoxOperation.QUICKSELECTSTATUS;
+            inputData["childTabsKey"] = this.props.childTabsKey;
+            inputData["removeElementFromArray"] = removeElementFromArray;
+            if (selectedArray.length > 0) {
+                this.props.getMasterDetail(inputData, true);
+            } else {
+                toast.warn(this.props.intl.formatMessage({ id: "IDS_NOITEMSFOUND" }))
+            }
+        }
+    }
+    getselectedDetailAvoidDuplicateProps = (master, inputData, needMultiSelect) => {
+        let selection = window.getSelection().toString();
+        if (selection.length > 0) {
+            // console.log("columnInfo.id", "no");
+        } else {
+            if ((this.props.selectedMaster.length === 1 &&
+                this.props.selectedMaster.findIndex(x => x[this.props.primaryKeyField] === master[this.props.primaryKeyField]) !== -1)
+                || (needMultiSelect === false)) {
+                // const showMore = {};
+                this.getSelectedDetail(master, inputData, needMultiSelect);
+            }
+            this.setState({
+                showList: null,
+                index: null,
+                activeIconIndex: null
+            })
+        }
+    }
+    getSelectedDetail = (master, inputData, needMultiSelect) => {
+        let bool;
+        let selectedMaster;
+        let selectedArray;
+        if (needMultiSelect === false) {
+            if (this.state.multipleselectionFlag) {
+                selectedMaster = getSameRecordFromTwoArrays(this.props.selectedMaster, this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take), this.props.primaryKeyField)
+            } else {
+                selectedMaster = master;
+            }
+
+            if (selectedMaster.length > 2) {
+                bool = true;
+            }
+            if (selectedMaster.length === 1 && this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === master[this.props.primaryKeyField]) !== -1) {
+                bool = false
+            } else {
+                bool = true
+            }
+        } else {
+            bool = true;
+        }
+        if (bool) {
+            // if(this.props.secondaryKeyField){
+            //     selectedArray = this.props.selectedMaster ? needMultiSelect ? this.props.selectedMaster : this.state.multipleselectionFlag ?
+            //     filterRecordBasedOnTwoArrays(this.props.selectedMaster, this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take), this.props.primaryKeyField,this.props.secondaryKeyField) : [] : [];
+
+            // }else{
+            selectedArray = this.props.selectedMaster ? needMultiSelect ? this.props.selectedMaster : this.state.multipleselectionFlag ? filterRecordBasedOnTwoArrays(this.props.selectedMaster, this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take), this.props.primaryKeyField) : [] : [];
+            //}
+            let dataList = [];
+            let removeElementFromArray = [];
+            let indexValue;
+            // if(this.props.secondaryKeyField){
+            //     indexValue= selectedArray ? selectedArray.findIndex(x => x[this.props.secondaryKeyField] ===master[this.props.secondaryKeyField]) ===-1 || selectedArray.findIndex(x =>x[this.props.primaryKeyField] ===master[this.props.primaryKeyField] && x[this.props.secondaryKeyField] ===master[this.props.secondaryKeyField]) !==-1?-1:
+            //     selectedArray.findIndex(x => x[this.props.primaryKeyField] ===master[this.props.primaryKeyField]) :-2 ; 
+
+            //                  // && selectedArray.findIndex(x => x[this.props.primaryKeyField] ===master[this.props.primaryKeyField])
+            // }
+            // else {
+            indexValue = selectedArray ?
+                selectedArray.findIndex(x => x[this.props.primaryKeyField] === master[this.props.primaryKeyField]) : -2;
+            //  }            
+            if (indexValue === -1) {//add new item
+                // let MultipleSelectCount = this.props.Login.settings[3];
+                // if (selectedArray.length < MultipleSelectCount) {
+
+
+                // if(this.props.secondaryKeyField){
+                //     removeElementFromArray = this.state.multipleselectionFlag ? getSameRecordFromTwoArrays(this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take), this.props.selectedMaster, this.props.primaryKeyField,this.props.secondaryKeyField) :
+                //     getSameRecordFromTwoArrays(this.props.masterList, this.props.selectedMaster, this.props.primaryKeyField,this.props.secondaryKeyField);
+
+                // }else{
+                removeElementFromArray = this.state.multipleselectionFlag ? getSameRecordFromTwoArrays(this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take), this.props.selectedMaster, this.props.primaryKeyField) :
+                    getSameRecordFromTwoArrays(this.props.masterList, this.props.selectedMaster, this.props.primaryKeyField);
+
+                // }
+                if (this.props.needMultiSelect) {//uselect an Item
+                    selectedArray.push(master);
+                    dataList.push(master[this.props.primaryKeyField]);
+                } else {//Click new Item
+                    selectedArray = [master];
+                    dataList = [master[this.props.primaryKeyField]];
+
+                }
+                inputData[`${this.props.selectedListName}`] = selectedArray
+                inputData[`${this.props.primaryKeyField}`] = dataList.join(",")
+                inputData[`${this.props.objectName}`] = selectedArray
+                // inputData["checkBoxOperation"] = needMultiSelect ? 1 : this.state.multipleselectionFlag ? 5 : 3;
+                inputData["checkBoxOperation"] = needMultiSelect ? checkBoxOperation.MULTISELECT : this.state.multipleselectionFlag ? checkBoxOperation.QUICKSELECTSTATUS : checkBoxOperation.SINGLESELECT;
+                inputData["childTabsKey"] = this.props.childTabsKey;
+                inputData["removeElementFromArray"] = needMultiSelect ? [] : removeElementFromArray;
+                inputData["secondarySelection"] = needMultiSelect;
+                if (selectedArray.length > 0) {
+                    this.props.getMasterDetail(inputData, true);
+
+                }
+                // } else {
+                //     toast.warn(`${this.props.intl.formatMessage({ id: "IDS_SELECTIONLIMITEXCEED" })} ${MultipleSelectCount} ${this.props.intl.formatMessage({ id: "IDS_RECORDS" })}`);
+                // }
+            } else if (needMultiSelect) {
+                // let removeElementFromArray = [];
+                if (needMultiSelect) {//uselect an Item
+                    removeElementFromArray.push(this.props.selectedMaster[indexValue]);
+                    selectedArray.splice(indexValue, 1)
+                    dataList.splice(indexValue, 1);
+
+                } else {//Click new Item
+                    removeElementFromArray.push(master);
+                    selectedArray.push(master);
+                    dataList.push(master[this.props.primaryKeyField])
+
+                }
+                inputData[`${this.props.selectedListName}`] = selectedArray;
+                inputData[`${this.props.primaryKeyField}`] = selectedArray.map(x => x[this.props.primaryKeyField]).join(",");
+                inputData[`${this.props.objectName}`] = selectedArray
+                // inputData["checkBoxOperation"] = needMultiSelect ? 2 : 4;
+                inputData["checkBoxOperation"] = needMultiSelect ? checkBoxOperation.DESELECT : checkBoxOperation.SINGLEDESELECT;
+                inputData["childTabsKey"] = this.props.childTabsKey;
+                inputData["removeElementFromArray"] = removeElementFromArray;
+                inputData["secondarySelection"] = needMultiSelect;
+                if (selectedArray.length > 0) {
+                    this.props.getMasterDetail(inputData, false);
+                }
+            } else {
+                selectedArray.push(master);
+                dataList.push(master[this.props.primaryKeyField])
+                inputData[`${this.props.selectedListName}`] = selectedArray
+                inputData[`${this.props.primaryKeyField}`] = dataList.join(",")
+                inputData[`${this.props.objectName}`] = selectedArray
+                // inputData["checkBoxOperation"] = needMultiSelect ? 1 : this.state.multipleselectionFlag ? 5 : 3;
+                inputData["checkBoxOperation"] = needMultiSelect ? checkBoxOperation.MULTISELECT : this.state.multipleselectionFlag ? checkBoxOperation.QUICKSELECTSTATUS : checkBoxOperation.SINGLESELECT;
+                inputData["secondarySelection"] = needMultiSelect;
+
+                inputData["childTabsKey"] = this.props.childTabsKey;
+                if (selectedArray.length > 0) {
+                    this.props.getMasterDetail(inputData, true);
+                }
+            }
+        }
+    }
+
+    /* onCheckBoxselect = (event, master, inputData) => {
+         
+             if (this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === master[this.props.primaryKeyField]) === -1) {
+                 this.getSelectedDetail(master, inputData, true);
+             } else if (this.props.selectedMaster.length > 1) {
+                 this.getSelectedDetail(master, inputData, true);
+             }
+        // }
+         this.setState({
+             showList: null
+         })
+ 
+         event.preventDefault();
+         event.stopPropagation();
+     }*/
+
+    onCheckBoxselect = (event, master, inputData) => {
+        // if(this.props.secondaryKeyField)
+        // {
+
+        //     //this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === master[this.props.primaryKeyField]) === -1 &&
+        //     if(this.props.selectedMaster.findIndex(m1 => m1[this.props.secondaryKeyField] === master[this.props.secondaryKeyField]) === -1
+        //     || this.props.selectedMaster.findIndex(m1 => m1[this.props.secondaryKeyField] === master[this.props.secondaryKeyField] && m1[this.props.primaryKeyField] !== master[this.props.primaryKeyField]) !== -1)
+        //     {
+        //         this.getSelectedDetail(master, inputData, true);
+        //     }
+        //     else if (this.props.selectedMaster.length > 1) {
+        //         this.getSelectedDetail(master, inputData, true);
+        //     }
+        // }
+        // else{
+        if (this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === master[this.props.primaryKeyField]) === -1) {
+            this.getSelectedDetail(master, inputData, true);
+        } else if (this.props.selectedMaster.length > 1) {
+            this.getSelectedDetail(master, inputData, true);
+        }
+        // }
+        this.setState({
+            showList: null
+        })
+
+        event.preventDefault();
+        event.stopPropagation();
+        // else{
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     this.getSelectedDetail(master, inputData, true);
+        // }
+    }
+
+
+    updateScrollHeight = (props, state) => {
+        setTimeout(() => {
+            const pagerheight = document.querySelector('.pager_wrap');
+            const navHeight = document.querySelector('.navbar.navbar-expand');
+            const filterAccHeight = document.querySelector('.filter-accordian');
+            const filterHeight = document.querySelector('.filter-wrap-group');
+            const breadCrumbsHeight = document.querySelector('.breadcrumbs-scroll-container');
+            const ipad = document.querySelector('html').classList.contains("ipad");
+            let val = navHeight ? navHeight.clientHeight : 53;
+
+            if (ipad) {
+                document.body.classList.add('ipad-hidden');
+                if (props.needAccordianFilter) {
+                    val = val + (filterAccHeight ? filterAccHeight.clientHeight : 45);
+                }
+                if (props.needFilter) {
+                    val = val + (breadCrumbsHeight ? breadCrumbsHeight.clientHeight : 36) + 6;
+                }
+                if (!props.notSearchable || !this.state.showSearch) {
+                    val = val + (filterHeight ? filterHeight.clientHeight : 55);
+                }
+                if (!props.hidePaging) {
+                    val = val + (pagerheight ? pagerheight.clientHeight : 32) + 58;
+                }
+                if (props.cardHead) {
+                    val = val + props.cardHead;
+                }
+            } else {
+                document.body.classList.remove('ipad-hidden');
+                if (props.needAccordianFilter) {
+                    val = val + (filterAccHeight ? filterAccHeight.clientHeight : 45);
+                }
+                if (props.needFilter) {
+                    val = val + (breadCrumbsHeight ? breadCrumbsHeight.clientHeight : 36);
+                }
+                if (!props.notSearchable || !this.state.showSearch) {
+                    val = val + (filterHeight ? filterHeight.clientHeight : 55);
+                }
+                if (!props.hidePaging) {
+                    val = val + (pagerheight ? pagerheight.clientHeight : 32);
+                }
+                if (props.cardHead) {
+                    val = val + props.cardHead;
+                }
+            }
+
+            this.setState({
+                scrollHeight: 'calc(100vh - ' + val + 'px)'
+
+            })
+        }, 1000)
+    }
+    componentDidMount() {
+        this.updateScrollHeight(this.props, this.state)
+
+    }
+    componentWillUnmount() {
+        document.body.classList.remove('ipad-hidden');
+    }
+
+
+    toggleSearch = () => {
+        this.setState({
+            showSearch: !this.state.showSearch
+        })
+    }
+
+    render() {
+        // console.log("prps:",this.props);
+        // const { skip, take } = this.state;
+        let checkStatus = ''
+        let masterList = this.props.masterList ? this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take) : [];
+        let selectedMaster = this.props.selectedMaster && this.props.masterList ? getSameRecordFromTwoArrays(this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take), this.props.selectedMaster, this.props.primaryKeyField) : [];
+        if (masterList && masterList.length > 0 && selectedMaster && selectedMaster.length > 0) {
+
+            if (masterList.length === selectedMaster.length) {
+                checkStatus = 'all'
+            } else if (masterList.length !== selectedMaster.length) {
+                checkStatus = 'partial'
+            } else if (this.props.selectedMaster.length === 0) {
+                checkStatus = ''
+            }
+        }
+        //console.log("checkStatus:",checkStatus);
+        // className="client-list-scroll"
+        return (
+            <>
+                {/* <ReactTooltip place="bottom" id="tooltip-common-wrap" globalEventOff='click' /> */}
+                <ListMasterWrapper className={`${this.state.showModalBg ? 'show_modal_bg' : ''} ${this.props.splitModeClass}`}>
+
+                    <SearchAdd className={`d-flex filter-wrap-group justify-content-between pad-15 ${this.props.titleClasses ? this.props.titleClasses : ''}`} >
+                        {!this.props.notSearchable ?
+                            <div>
+                                <InputGroup className="search-with-ico-list align-items-center">
+                                    <InputGroup.Append>
+                                        {this.props.needMultiSelect ?
+                                            <QuickSearch
+                                                checkStatus={checkStatus}
+                                                //selectionList={this.props.hideQuickSearch ? "" : filterStatusBasedOnTwoArrays(this.props.selectionList || [], this.props.masterList ? this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take) : [], this.props.selectionField, this.props.selectionColorField)}
+                                                selectionList={this.props.hideQuickSearch ? "" : this.props.viewSampleStatus ? filterStatusBasedOnSingleArray(this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take), this.props.selectionField, this.props.selectionColorField) : filterStatusBasedOnTwoArrays(this.props.selectionList || [], this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take), this.props.selectionField, this.props.selectionColorField)}
+                                                selectionField={this.props.selectionField}
+                                                selectionFieldName={this.props.selectionFieldName}
+                                                selectionColorField={this.props.selectionColorField}
+                                                selectMultiple={this.selectMultiple}
+                                                inputParam={this.props.inputParam}
+                                            />
+                                            : ""}
+                                    </InputGroup.Append>
+                                    {this.props.hideSearch ? "" :
+                                        !this.props.disableToolBarItems ?
+                                            // <FormControl ref={this.props.searchRef} autoComplete="off" placeholder={`${this.props.intl.formatMessage({ id: "IDS_SEARCH" })} ${this.props.intl.formatMessage({ id: this.props.listName })}`} name={"search"} onKeyUp={(e) => this.filterColumn(e)} />
+                                            <>    <div className={`list-group-search tool-search ${this.state.showSearch ? 'activesearch' : ""}`}>
+                                                <SearchIcon className={`search-icon ${false ? 'filter-column-active' : ''}`} onClick={this.toggleSearch}>
+                                                    <FontAwesomeIcon icon={faSearch} />
+                                                </SearchIcon>
+
+                                                <FormControl ref={this.props.searchRef} autoComplete="off" placeholder={`${this.props.intl.formatMessage({ id: "IDS_SEARCH" })}`} name={"search"} onKeyUp={(e) => this.filterColumn(e)} />
+                                                {this.state.showSearch ?
+                                                    <SearchIcon className="close-right-icon" onClick={this.toggleSearch}>
+                                                        <FontAwesomeIcon icon={faTimes} />
+                                                    </SearchIcon>
+                                                    : ""}
+
+
+                                            </div>
+                                                {/* Start of ALPD-4130 Additional Filter and Clear All Filter - ATE-241 */}
+                                                {this.state.showSearch && this.props.needMultiValueFilter ?
+                                                    <>
+                                                        <a className='nav-link p-0'>
+                                                            <FontAwesomeIcon icon={faFilter} className='fa-1x' onClick={this.props.onMultiFilterClick} />
+                                                        </a>
+                                                        <a className="btn btn-link ml-2 p-0" variant="link"
+                                                            data-tooltip-id="my-tooltip" data-tooltip-content={this.props.intl.formatMessage({ id: "IDS_CLEARFILTER" })}
+                                                            //   data-for="tooltip-common-wrap"
+                                                            onClick={this.props.clearAllFilter} >
+                                                            Clear Filter
+                                                        </a>
+                                                    </>
+                                                    : ""}
+                                                {/* End of ALPD-4130 Additional Filter End -ATE-241 */}
+                                            </>
+                                            : ""
+
+                                    }
+                                    {!this.state.showSearch ?
+                                        <span className='filter-top-wrap'>
+                                            {!this.props.disableToolBarItems && this.props.needFilter ?
+                                                <InputGroup.Append>
+                                                    <AdvFilter
+                                                        filterComponent={this.props.filterComponent}
+                                                        dataFor="tooltip-common-wrap"
+                                                        onFilterSubmit={this.props.onFilterSubmit}
+                                                        filterSubmitValueEmpty={this.props.filterSubmitValueEmpty}
+                                                        // ALPD-5908  Added filterSubmitValueEmpty by Vishakh for advance filter submit with empyty values enhancement(01-07-2025)
+                                                        showFilter={this.props.showFilter}
+                                                        openFilter={this.props.openFilter}
+                                                        closeFilter={this.props.closeFilter}
+                                                        callCloseFunction={this.props.callCloseFunction}
+                                                        showModalBg={(e) => this.setState({ showModalBg: e })}
+
+                                                    />
+                                                </InputGroup.Append>
+                                                : ""}
+
+
+                                            {this.props.moreField && this.props.moreField.length > 0 ?
+                                                <InputGroup.Append>
+                                                    <InputGroup.Text>
+                                                        {/* <ProductList className="d-flex justify-content-end icon-group-wrap"> */}
+                                                        <Nav.Link className="p-0" name="gridexpand" onClick={() => this.ExpandAll(masterList)}>
+                                                            {/* <FontAwesomeIcon icon={faArrowsAltV} /> */}
+                                                            {this.props.intl.formatMessage({
+                                                                id: this.props.masterList.length ? this.state.expandCheck ?
+                                                                    this.props.masterList.length === this.state.expandCheck.length ?
+                                                                        this.state.expandCheck.includes(false) ? "IDS_EXPANDALL" : "IDS_EXPANDLESS"
+                                                                        : this.state.allFieldExpanded ? "IDS_EXPANDLESS" : "IDS_EXPANDALL"
+                                                                    : this.state.allFieldExpanded ? "IDS_EXPANDLESS" : "IDS_EXPANDALL"
+                                                                    : this.state.allFieldExpanded ? "IDS_EXPANDLESS" : "IDS_EXPANDALL"
+                                                            })}
+                                                        </Nav.Link>
+                                                        {/* </ProductList> */}
+                                                    </InputGroup.Text>
+                                                </InputGroup.Append>
+                                                : ""}
+                                        </span> : ""}
+
+                                </InputGroup> </div> : ''}
+                    </SearchAdd>
+                    {!this.state.showSearch ?
+                        <div className='action-list-wrap'>
+                            <PerfectScrollbar>
+                                {/* ATE234 Janakumar Added By designer for the refersh button align in right BGSI-8 Screen Name -> Site Hospital Mapping */}
+                                <SearchAdd className={`d-flex filter-wrap-group justify-content-end pad-15 ${this.props.titleClasses ? this.props.titleClasses : ''}`} >
+
+                                    <>
+
+                                        <span>
+                                            {this.props.titleHead ? <h4>{this.props.titleHead}</h4> : ''}
+                                            {this.props.commonActions}
+                                        </span>
+                                    </>
+                                </SearchAdd>
+                            </PerfectScrollbar>
+                        </div>
+                        : ""}
+                    {
+                        this.props.needAccordianFilter ?
+                            <FilterAccordion key="filter" className="filter-accordian"
+                                filterComponent={this.props.accordianfilterComponent}
+                            />
+                            : ""
+                    }
+                    {/* className={` ${this.props.masterList && this.props.masterList.length > 0 ? 'parent-port-height' : 0}`} className="box-shadow-box-btm" */}
+                    <PerfectScrollbar >
+                        {/*<ClientList className="product-list" style={{ height: this.props.paneHeight ? this.props.paneHeight : this.props.masterList && this.props.masterList.length > 0 ? 'calc(100vh - 230px)' : 'calc(100vh - 180px)' }}>
+                   */}
+
+                        <ClientList className={`product-list sm-list-view port-height-inner ${this.props.actionIcons && this.props.actionIcons.filter(element => { return element.hidden === false }).length > 0 ? '' : 'no-action-icons'}`} style={{ height: this.props.paneHeight ? this.props.paneHeight : this.state.scrollHeight }}>
+                            <ListView
+                                //  data={this.props.hidePaging ? this.props.masterList : this.props.masterList ? this.props.masterList.slice(this.state.skip, this.props.skip + this.props.take) : []}
+                                //                data={this.props.hidePaging ? this.props.masterList : this.props.masterList.slice(this.props.skip ? 
+                                //                    this.props.skip : this.state.skip, ((this.props.skip ? this.props.skip : this.state.skip) + 
+                                //                (this.props.take ? this.props.take : this.state.take)))}
+                                //   //  item={(props, index) => this.transactionListDesign(props, this.props.skip, index)}
+                                //        //       data={this.props.hidePaging ? this.props.masterList : this.props.masterList.slice(this.props.skip ? this.props.skip : this.state.skip, ((this.props.skip ? this.props.skip : this.state.skip) + (this.props.take ? this.props.take : this.state.take)))}
+                                //        item={(props) => this.transactionListDesign(props)}
+                                data={this.props.hidePaging ? this.props.masterList : this.props.masterList.slice(this.props.skip, this.props.skip + this.props.take)}
+                                item={(props, section, index) => this.transactionListDesign(props, this.props.skip, index)}
+
+
+                            //  item={(props, index) => this.transactionListDesign(props, 0, 0)}
+
+                            // style={{ width: "100%" }}
+                            // header={myHeader}
+                            // footer={this.myFooter}
+                            //item={React.ComponentType<ListViewItemProps>} 
+
+                            />
+                        </ClientList>
+                    </PerfectScrollbar >
+                    {
+                        this.props.hidePaging ? "" :
+                            this.props.masterList && this.props.masterList.length > 0 ?
+                                <CustomPager
+                                    skip={this.props.skip}
+                                    //width={this.props.splitChangeWidthPercentage}
+                                    take={this.props.take}
+                                    handlePageChange={this.props.handlePageChange}
+                                    total={this.props.masterList.length}
+                                    buttonCount={this.props.splitChangeWidthPercentage >= 30 ? this.state.buttonCount : this.props.buttonCount ? this.props.buttonCount : 2}
+                                    userInfo={this.props.Login.userInfo}
+                                    info={this.state.info}
+                                    pagershowwidth={30}
+                                    // pageSize={this.props.Login.settings && this.props.Login.settings[4].split(",").map(setting => parseInt(setting))}
+                                    pageSize={this.props.pageSize || (this.props.Login.settings && this.props.Login.settings[4].split(",").map(setting => parseInt(setting)))}
+                                //  pageSize={this.props.pageSize || (this.props.Login.settings && this.props.Login.settings[4].split(",").map(setting => parseInt(setting)))}
+                                >
+                                </CustomPager>
+                                //     <CustomPager
+                                //     skip={this.props.skip ? this.props.skip : this.state.skip}
+                                //     take={this.props.take ? this.props.take : this.state.take}
+                                //     width={20}
+                                //     pagershowwidth={18}
+                                //     handlePageChange={this.props.handlePageChange}
+                                //     total={this.props.masterList ? this.props.masterList.length : 0}
+                                //     buttonCount={this.state.buttonCount}
+                                //     info={this.state.info}
+                                //     userInfo={this.props.Login.userInfo}
+                                //     pageSize={this.props.pageSize? this.props.pageSize :this.props.Login.settings && this.props.Login.settings[4].split(",").map(setting => parseInt(setting))}
+                                // >
+                                //s </CustomPager>
+                                : ''
+                    }
+                </ListMasterWrapper >
+            </>
+        )
+    }
+    // myFooter = () => {
+    //     return (
+
+    //     )
+    // }
+    onClickActions1 = (event, dataItem) => {
+
+        event.stopPropagation();
+        this.props.ListmasterSwitch({ event, nusersrolehidescreencode: dataItem.nusersrolehidescreencode })
+    }
+
+    onClickActions = (event, master, action) => {
+
+        event.stopPropagation();
+        let selectedArray = this.props.selectedMaster ? this.props.selectedMaster : [];
+        let dataList = selectedArray.map(item => item[this.props.primaryKeyField]);
+        const indexValue = this.props.selectedMaster ? this.props.selectedMaster.findIndex(x => x[this.props.primaryKeyField] === master[this.props.primaryKeyField]) : -2;
+        if (indexValue === -1) {
+            if (this.props.needMultiSelect) {
+                selectedArray.push(master);
+                dataList.push(master[this.props.primaryKeyField]);
+            } else {
+                selectedArray = [master];
+                dataList = [master[this.props.primaryKeyField]];
+            }
+        }
+        action.onClick({ ...action.inputData, [action.objectName]: master, [this.props.selectedListName]: selectedArray, [this.props.primaryKeyField]: dataList.join(",") })
+      
+         {/* component commented by L.Subashini 13/12/2025 while upgrading to React 17 */}
+       // ReactTooltip.hide();
+    }
+
+    showHideDetails = (event, index) => {
+        event.stopPropagation();
+        let showMore = { ...this.state.showMore, [index]: !this.state.showMore[index] }
+        //   const check=showMore.map(item=>{return})
+        const expandAll = [...Object.values(showMore)]
+        let allFieldExpanded = this.state.allFieldExpanded;
+        if (expandAll.includes(false)) {
+            allFieldExpanded = false
+        } else {
+            let len = this.props.masterList.length
+            if (len === expandAll.length) {
+                allFieldExpanded = true
+            }
+        }
+        this.setState({ showMore, allFieldExpanded, expandCheck: expandAll, disableClick: true })
+
+    }
+    ExpandAll = (masterData) => {
+        const allFieldExpanded = this.state.allFieldExpanded;
+        let showMore = {};
+        if (!allFieldExpanded) {
+            showMore = masterData.map((master, index) => {
+                return showMore = { ...showMore, [index]: true };
+            });
+        }
+        this.setState({ showMore, allFieldExpanded: !allFieldExpanded });
+    }
+    iconGroupView(index) {
+        this.setState({ activeIconIndex: this.state.activeIconIndex === index ? null : index })
+    }
+
+    checkboxValidation(item) {
+        // if(this.props.secondaryKeyField && this.props.selectedMaster)
+        // {
+
+        //     if(this.props.secondarySelection)
+        //     {
+        //         // if(this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === item[this.props.primaryKeyField]) !== -1 
+        //         // && this.props.selectedMaster.findIndex(m1 => m1[this.props.secondaryKeyField] === item[this.props.secondaryKeyField]) !== -1
+        //         // )
+        //         // {
+        //         //         return true;
+        //         // }
+
+        //         if(this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === item[this.props.primaryKeyField] && m1[this.props.secondaryKeyField] === item[this.props.secondaryKeyField]) !== -1)
+        //         {
+        //             return true;
+        //         }
+        //         // else if(this.props.selectedMaster.length()==1)
+        //         // {
+        //         //     if(this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === item[this.props.primaryKeyField] && m1[this.props.secondaryKeyField] === item[this.props.secondaryKeyField]) == -1)
+        //         //     {
+        //         //         return true;
+        //         //     }
+        //         // }
+
+        //     }
+        //     else if(this.props.selectedMaster && this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === item[this.props.primaryKeyField]) !== -1)
+        //     {
+        //         return true;
+        //     }
+        //     else{
+        //         return false;
+        //     }
+        // }
+        // else{
+
+        if (this.props.selectedMaster && this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === item[this.props.primaryKeyField]) !== -1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+        //}
+    }
+
+    transactionListDesign = (props, skip, index) => {
+        let item = props.dataItem;
+        // console.log("item:", item);
+        const customswitchposition = {
+            // 'padding-left': '290px',
+            'padding-top': '-20px'
+        }
+        // let index;
+        // const onLongPress = (e) => {
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        //     this.setState({
+        //         index: props.index === this.state.index ? null : props.index
+        //     })
+        // };
+        const ref = useRef(null);
+        const [width, setWidth] = useState(0);
+        useLayoutEffect(() => {
+            function updateSize() {
+                setWidth(ref.current.offsetWidth - 200);
+            }
+            window.addEventListener('resize', updateSize);
+            updateSize();
+            return () => window.removeEventListener('resize', updateSize)
+        }, []);
+        const actionCount = this.props.actionIcons && this.props.actionIcons.filter(element => { return element.hidden === false }).length;
+        let findWidth;
+        if (width > 200) {
+            findWidth = false;
+        } else {
+            findWidth = true;
+        }
+        return (
+            <>
+                {/* <ReactTooltip place="bottom" id="tooltip-common-wrap" globalEventOff='click' /> */}
+                <ListGroup.Item as="li" ref={ref}
+                    className={`${this.state.showList === props.index ? "hover" : ""}  list-custom-ico-on-hover list-bgcolor  
+                    ${this.checkboxValidation(item) ? "active" : ""}`}>
+                    {/* //this.props.selectedMaster && this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === item[this.props.primaryKeyField]) !== -1 */}
+                    <Media onClick={() => this.getselectedDetailAvoidDuplicateProps(item, { ...this.props.inputParam }, false)}>
+                        {this.props.needMultiSelect ?
+                            <Form.Check custom type="checkbox" id="customControl">
+                                <Form.Check.Input type="checkbox" id={`tm_customCheck_${this.props.listName}_${props.index}`}
+                                    // checked={this.props.selectedMaster &&
+                                    //     this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === item[this.props.primaryKeyField]) !== -1 ? true : false}
+
+                                    checked={this.checkboxValidation(item)}
+
+                                    readOnly
+                                />
+                                {/* <Form.Check.Label className={`mr-3 ${this.props.showStatusBlink && item["bflag"] ? "blinkCheckbox":""}`} */}
+                                <Form.Check.Label className={"mr-1"}
+                                    onClick={(event) => this.onCheckBoxselect(event, item, { ...this.props.inputParam }, true)}
+                                    htmlFor={`tm_customCheck_${this.props.listName}_${props.index}`}>
+
+                                    {/* <TickIcon className='svg-icon list-tick-icon' width='11px' /> */}
+                                </Form.Check.Label>
+                            </Form.Check>
+                            : ""}
+                        <Media.Body >
+
+                            {/* <MediaHeader>
+                        {this.props.mainFieldLabel && this.props.mainFieldLabel.concat(" : ")}
+                        {item[this.props.mainField]}
+                        {this.props.showStatusLink &&
+                            <Nav.Link className='add-txt-btn blue-text ml-1' style={{ display: 'inline', color: this.props.statusColor ? item[this.props.statusColor] : item.scolorhexcode }}>
+                                {this.props.showStatusIcon && getStatusIcon(item[this.props.statusField])}
+                                {this.props.showStatusName && <span className='ml-1 text-nowrap'>{item[this.props.statusFieldName]}</span>}
+                            </Nav.Link>
+                        }
+                    </MediaHeader> */}
+
+                            <ContentPanel className={`product-category  title-grid-wrap-width-md d-flex align-items-center' ${this.state.allFieldExpanded || this.state.showMore[props.index] ? 'show-listed-view' : ""} ${this.state.activeIconIndex === props.index ? "show-more-action-clicked" : ""}`}>
+                                <>
+                                    <div className='list-more-positioned'>
+                                        <div className={!findWidth ? 'd-flex' : ''}>
+                                            <MediaHeader data-tooltip-id="my-tooltip" data-tooltip-content={item[this.props.mainField]}  //data-for="tooltip-common-wrap"
+                                                style={{ maxWidth: this.props.objectName === "test" ? width + 100 : "15rem" }}>
+                                                {this.props.mainFieldLabel && this.props.mainFieldLabel.concat(" : ")}
+                                                {item[this.props.mainField]}
+                                                {/* || item['jsondata'][this.props.mainField] */}
+                                                {/* {console.log(item[this.props.mainField] ? item[this.props.mainField] : item['jsondata'][this.props.mainField])} */}
+
+                                                {this.props.showStatusBlink && item["bflag"] ?
+                                                    // <div class="blink">🔴</div> 
+                                                    <FontAwesomeIcon class="blink" style={{ width: "0.8rem" }} icon={faExclamationCircle} />
+                                                    : ""}
+                                            </MediaHeader>
+                                            {this.props.showStatusLink && this.props.showStatusName &&
+                                                <>
+                                                    {this.props.showStatusIcon && getStatusIcon(item[this.props.statusField])}
+
+                                                    {this.props.showStatusName &&
+                                                        <Nav.Link className='add-txt-btn blue-text mr-2'
+                                                            style={{ padding: "0", display: 'inline' }}>
+                                                            {/* ALPD-5316 Test Approval -> Decision Status there have based on sample type. */}
+                                                            <span className='text-nowrap'
+                                                                style={{ padding: "0", display: 'inline', color: item.scolorhexcode ? item.scolorhexcode : "" }}>
+                                                                {`${item[this.props.statusFieldName].split("out")[0]}`}
+                                                            </span>
+                                                            {/*
+                                                            ALPD-4941--Added by vignesh R(07-02-2025)-->this prop is passed to TransactionListMaster to display the second status color.
+                                                            */}
+                                                            {/*start*/}
+                                                            {/* ALPD-5316 Test Approval -> Decision Status there have based on sample type. by rukshana */}
+                                                            {
+                                                                this.props.secondaryField &&
+                                                                <span className='text-nowrap' style={{
+                                                                    padding: "0", display: 'inline',
+                                                                    color: this.props.statusColor ? item[this.props.statusColor] :
+                                                                        this.props.secondaryField ? item[this.props.statusColor] : ""
+                                                                }}>
+
+                                                                    {`${item[this.props.secondaryField] && item[this.props.secondaryField] !== null ? ( this.props.hasOwnProperty("secondaryIdsDisplayField") ? " | "+ this.props.intl.formatMessage({ id: this.props.secondaryIdsDisplayField }) : item[this.props.secondaryField]) : this.props.secondaryField && item[this.props.secondaryField] && item[this.props.secondaryField] !== null ? item[this.props.secondaryField] : ""}`}
+                                                                </span>
+                                                            }
+                                                            {/*end*/}
+
+                                                        </Nav.Link>
+                                                    }
+
+
+
+                                                    {(this.props.primaryKeyField === "ntransactiontestcode" || this.props.primaryKeyField === "ntransactionsamplecode") &&
+                                                        <Nav.Link className='add-txt-btn blue-text mr-2'
+                                                            style={{ padding: "0", display: 'inline', color: "blue" }}>
+                                                            <span className='text-nowrap'>
+                                                                {item[this.props.statusFieldName].includes("out") ? item[this.props.statusFieldName].substring(item[this.props.statusFieldName].indexOf(" out") + 1) : ""}</span>
+                                                        </Nav.Link>
+                                                    }
+                                                </>
+                                                //     <>
+
+                                                //     {this.props.showStatusIcon && getStatusIcon(item[this.props.statusField])}
+
+                                                //     {this.props.showStatusName &&
+                                                //     <>                                                        
+                                                //         <Nav.Link className='add-txt-btn blue-text mr-2'
+                                                //         style={{ padding: "0", display: 'inline', color: this.props.statusColor ? item[this.props.statusColor] : item.scolorhexcode }}>
+                                                //             <span className='text-nowrap'>
+                                                //             { item[this.props.statusFieldName]}</span>                                                            
+                                                //         </Nav.Link>
+                                                //         <Nav.Link className='add-txt-btn blue-text mr-2'
+
+                                                //         style={{ padding: "0", display: 'inline', color: "blue"}}>
+
+                                                //             <span className='text-nowrap'>
+
+                                                //             "sathish"</span>                                                            
+
+                                                //         </Nav.Link>
+
+                                                //         </>
+
+                                                //     }
+
+                                                // </>
+                                            }
+                                            {/* <MediaHeader className='header-full-view'>
+                                            {this.props.showStatusLink &&
+                                                <Nav.Link className='add-txt-btn blue-text'
+                                                    style={{ padding: "0", display: 'inline', color: this.props.statusColor ? item[this.props.statusColor] : item.scolorhexcode }}>
+                                                    {this.props.showStatusIcon && getStatusIcon(item[this.props.statusField])}
+                                                    {this.props.showStatusName &&
+                                                    <span className='ml-1 text-nowrap'>
+                                                    { item[this.props.statusFieldName] }</span>}
+                                                </Nav.Link>
+                                            }
+                                            </MediaHeader> */}
+                                        </div>
+                                    </div>
+
+                                </>
+                            </ContentPanel>
+                            <MediaSubHeaderText style={{ padding: "0.1rem" }} className="text-wrap">
+                                <span>
+
+
+
+                                    {this.props.subFields && this.props.subFields.map((field, index) =>
+                                        this.props.subFieldsLabel ?
+                                            <>
+                                                <MediaLabel>{`${field[designProperties.LABEL][this.props.Login.userInfo.slanguagetypecode] &&
+                                                    field[designProperties.LABEL][this.props.Login.userInfo.slanguagetypecode] + " : " ||
+                                                    this.props.intl.formatMessage({ id: field[designProperties.LABEL] }) + " : "}`}</MediaLabel>
+                                                <MediaLabel style={{ color: field[designProperties.COLOUR] ? item.scolorhexcode || item[field[designProperties.COLOUR]] : "" }}>
+                                                    {item[field[designProperties.VALUE]] === undefined || item[field[designProperties.VALUE]] === '' ? '-' : item[field[designProperties.VALUE]]}
+                                                </MediaLabel>
+                                                {index !== this.props.subFields.length - 1 ? <MediaLabel className="seperator">|</MediaLabel> : ""}
+                                                {/* {(index + 1) % 2 === 0 ? <br></br> : ""} */}
+                                                {/* index % 2 === 0 && */}
+                                            </> :
+                                            <>
+                                                <MediaLabel style={{ color: field[designProperties.COLOUR] ? item.scolorhexcode || item[field[designProperties.COLOUR]] : "" }}>
+                                                    {`${item[field[designProperties.VALUE]] === undefined || item[field[designProperties.VALUE]] === '' ? '-' : item[field[designProperties.VALUE]]}`}</MediaLabel>
+                                                {this.props.subFieldsFile && (field && field[designProperties.LISTITEM] === 'files') ?
+                                                    <FontIconWrap icon={faCloudDownloadAlt} className="ml-2 className action-icons-wrap" size="lg"
+                                                        data-tooltip-id="my-tooltip" data-tooltip-content={this.props.intl.formatMessage({ id: "IDS_DOWNLOAD" })}
+                                                        data-place="left"
+                                                        onClick={() => this.props.dynamicFileDownload({ ...item, field, viewName: "subSample", userInfo: this.props.Login.userInfo })}>
+                                                        <FontAwesomeIcon icon={faCloudDownloadAlt} />
+                                                    </FontIconWrap> : ""}
+                                                {index !== this.props.subFields.length - 1 ? <MediaLabel className="seperator">|</MediaLabel> : ""}
+                                                {/* {(index + 1) % 2 === 0 ? <br></br> : ""} */}
+                                                {/* index % 2 === 0 &&  */}
+                                            </>
+                                    )}
+                                </span>
+                                {this.props.moreField && this.props.moreField.length > 0 ?
+                                    <>
+                                        {/* <MediaLabel>
+                                    <Nav.Link name={`show-wrap_${props.index}`} className={`show-more-action showmore`} onClick={(event) => this.showHideDetails(event, props.index)} style={{ display: "inline" }}>
+                                        <Form.Label className={`show-more-link showmore`} htmlFor={`show-wrap_${props.index}`}>{` ...${this.props.intl.formatMessage({ id: this.state.allFieldExpanded ? "IDS_SHOWLESS" : this.state.showMore[props.index] ? "IDS_SHOWLESS" : "IDS_SHOWMORE" })}`}</Form.Label>
+                                    </Nav.Link>
+                                </MediaLabel> */}
+                                        <Media.Body className={`show-more-wrap ${this.state.allFieldExpanded ? "showmore" : this.state.showMore[props.index] ? "showmore" : ""}`}>
+                                            <MediaSubHeader>
+                                                {this.props.moreField.map((field, index) =>
+                                                    <>
+                                                        <MediaLabel className='text-wrap' >{`${field[designProperties.LABEL][this.props.Login.userInfo.slanguagetypecode] ?
+                                                            field[designProperties.LABEL][this.props.Login.userInfo.slanguagetypecode] + " : " :
+                                                            this.props.intl.formatMessage({ id: field[designProperties.LABEL] }) + " : "}  ${item[field[designProperties.VALUE]]}`}</MediaLabel>
+                                                        {index % 2 === 0 && index !== this.props.moreField.length - 1 ? <MediaLabel className="seperator">|</MediaLabel> : ""}
+                                                        {(index + 1) % 2 === 0 ? <br></br> : ""}
+                                                    </>
+                                                )}
+                                            </MediaSubHeader>
+                                        </Media.Body>
+                                    </> : ""}
+                            </MediaSubHeaderText>
+                        </Media.Body>
+                        <div className={`icon-list-sm-wrap ${props.index === this.state.index ? 'active' : ""}`}>
+                            {this.props.actionIcons && this.props.selectedMaster &&
+                                (this.props.selectedMaster.findIndex(m1 => m1[this.props.primaryKeyField] === item[this.props.primaryKeyField]) !== -1)
+                                && this.props.actionIcons.length > 0 ?
+                                // <div onClick={onLongPress} className="icon-list-sm" >
+                                //  <div className="icon-list-sm" >
+                                //      <FontAwesomeIcon size="sm" icon={faChevronDown} />
+                                //  </div>
+                                "" : ""}
+                        </div>
+                        {this.props.moreField && this.props.moreField.length > 0 ?
+                            <MediaLabel className={`show-more-action-wrap ${actionCount > 0 && 'vertical-icon-space'}`}>
+                                <Nav.Link name={`show-wrap_${props.index}`} className={`show-more-action showmore no-padding`} onClick={(event) => this.showHideDetails(event, props.index, "inner")} style={{ display: "inline" }} title={this.props.intl.formatMessage({ id: this.state.allFieldExpanded ? "IDS_SHOWLESS" : this.state.showMore[props.index] ? "IDS_SHOWLESS" : "IDS_SHOWMORE" })}>
+                                    {/* <Form.Label className={`show-more-link mr-1 showmore`} htmlFor={`show-wrap_${props.index}`}>{` ${this.props.intl.formatMessage({ id: this.state.allFieldExpanded ? "IDS_SHOWLESS" : this.state.showMore[props.index] ? "IDS_SHOWLESS" : "IDS_SHOWMORE" })}`}</Form.Label> */}
+                                    <FontAwesomeIcon size="sm" htmlFor={`show-wrap_${props.index}`} icon={this.state.allFieldExpanded ? faChevronUp : this.state.showMore[props.index] ? faChevronUp : faChevronDown} />
+                                </Nav.Link>
+                            </MediaLabel>
+                            : ""}
+                        {actionCount > 1 ?
+                            <div className={`icon-group-wrap ${this.props.actionIcons && this.props.listMasterShowIcon ? "enable-view" : ""} ${this.props.clickIconGroup ? "click-view" : "hover-view"} ${this.state.activeIconIndex === props.index ? "active" : ""}`}>
+                                {this.props.actionIcons && this.props.actionIcons.length > 0 && this.props.actionIcons.map((action, index) =>
+                                    <span className={`${this.props.listMasterShowIcon && index + 1 > this.props.listMasterShowIcon ? 'disable-view' : ""}`}>
+                                        {action.needConditionalIcon ?
+                                            action.conditionalIconFunction(item) &&
+                                            <Nav.Link
+                                                className="btn btn-circle outline-grey ml-2"
+                                                // data-for="tooltip-common-wrap"
+                                                data-place={action.dataplace && action.dataplace ? action.dataplace : ""}
+                                                data-tooltip-id="my-tooltip" data-tooltip-content={action.title}
+                                                hidden={action.hidden === undefined ? true : action.hidden}
+                                                onClick={(event) => this.onClickActions(event, item, action)}>
+                                                {getActionIcon(action.controlname)}
+                                            </Nav.Link>
+                                            :
+                                            <Nav.Link
+                                                className="btn btn-circle outline-grey ml-2"
+                                                // data-for="tooltip-common-wrap"
+                                                data-tooltip-id="my-tooltip" data-tooltip-content={action.title}
+                                                data-place={action.dataplace && action.dataplace ? action.dataplace : ""}
+                                                hidden={action.hidden === undefined ? true : action.hidden}
+                                                onClick={(event) => this.onClickActions(event, item, action)}>
+                                                {getActionIcon(action.controlname)}
+                                            </Nav.Link>}
+                                    </span>
+                                )}
+
+
+                                {/* {this.props.ListmasterSwitch && this.props.ListScreenHidebtn &&
+                                            <span data-for="screenrights_wrap"
+                                                data-tooltip-id="my-tooltip" data-tooltip-content={this.props.intl.formatMessage({ id: "IDS_ENABLEDISABLESCREEN" })}>
+                                                   <Nav.Link  onChange={(event) => this.onClickActions1(event, props.dataItem)}>
+                                                 <div style={customswitchposition} > 
+                                                    { 
+                                                        <CustomSwitch type="switch" id={props.dataItem.nusersrolehidescreencode}
+                                                        //  id={"ListmasterSwitch"}
+                                                        //onChange={(event) => this.onClickActions1(event, props.dataItem)}
+                                                        checked={props.dataItem.needrights === transactionStatus.YES ? true : false}
+                                                        name={props.dataItem.nusersrolehidescreencode}
+                                                        className="custom-switch-md customeswitchmanual"
+                                                        //data-tooltip-id="my-tooltip" data-tooltip-content={"Enable to group by screen name"}
+                                                        // data-for="screenrights_wrap"
+                                                        />
+                                                    }
+                                                  </div> 
+                                                </Nav.Link> 
+                                            </span>
+                                    } */}
+
+                            </div>
+                            :
+                            <>
+
+                                {this.props.actionIcons && this.props.actionIcons.length > 0 && this.props.actionIcons.map((action, index) =>
+                                    <span className={`${this.props.listMasterShowIcon && index + 1 > this.props.listMasterShowIcon ? 'disable-view' : "moreicon"}`}>
+                                        {action.needConditionalIcon ?
+                                            action.conditionalIconFunction(item) &&
+                                            <Nav.Link
+                                                className="btn btn-circle outline-grey ml-2"
+                                                // data-for="tooltip-common-wrap"
+                                                data-place={action.dataplace && action.dataplace ? action.dataplace : ""}
+                                                data-tooltip-id="my-tooltip" data-tooltip-content={action.title}
+                                                hidden={action.hidden === undefined ? true : action.hidden}
+                                                onClick={(event) => this.onClickActions(event, item, action)}>
+                                                {getActionIcon(action.controlname)}
+                                            </Nav.Link>
+                                            :
+                                            <Nav.Link
+                                                className="btn btn-circle outline-grey ml-2"
+                                                // data-for="tooltip-common-wrap"
+                                                data-tooltip-id="my-tooltip" data-tooltip-content={action.title}
+                                                data-place={action.dataplace && action.dataplace ? action.dataplace : ""}
+                                                hidden={action.hidden === undefined ? true : action.hidden}
+                                                onClick={(event) => this.onClickActions(event, item, action)}>
+                                                {getActionIcon(action.controlname)}
+                                            </Nav.Link>}
+                                    </span>
+                                )}
+                            </>
+                        }
+
+
+                    </Media >
+
+                    {this.props.clickIconGroup ?
+
+                        (this.props.listMasterShowIcon && this.props.actionIcons && this.props.actionIcons.length <= this.props.listMasterShowIcon) ? "" :
+                            <>
+                                {actionCount > 1 ?
+                                    <><span className='vertical-dots end-icon' onClick={() => this.iconGroupView(props.index)}></span></>
+                                    :
+                                    ''
+                                }
+
+                            </>
+                        : ""}
+
+                    {this.props.ListmasterSwitch && this.props.ListScreenHidebtn &&
+                        <span
+                            //data-for="screenrights_wrap" 
+                            data-tooltip-id="my-tooltip" data-tooltip-content={this.props.intl.formatMessage({ id: "IDS_ENABLEDISABLESCREEN" })}>
+                            <div style={customswitchposition} >
+                                {<CustomSwitch type="switch" id={props.dataItem.nusersrolehidescreencode}
+                                    //  id={"ListmasterSwitch"}
+                                    onChange={(event) => this.props.ListmasterSwitch(event, props.dataItem.nusersrolehidescreencode)}
+                                    checked={props.dataItem.needrights === transactionStatus.YES ? true : false}
+                                    name={props.dataItem.nusersrolehidescreencode}
+                                    className="custom-switch-md customeswitchmanual"
+                                //data-tooltip-id="my-tooltip" data-tooltip-content={"Enable to group by screen name"}
+                                // data-for="screenrights_wrap"
+                                />}
+                            </div>
+                        </span>
+                    }
+                </ListGroup.Item >
+            </>
+        )
+    }
+
+    componentDidUpdate(previousProps) {
+       
+         {/* component commented by L.Subashini 13/12/2025 while upgrading to React 17 */}
+       // ReactTooltip.rebuild();
+        if (this.props.showMoreResetList) {
+            if (this.props.inputParam.masterData && !Array.isArray(this.props.inputParam.masterData) && this.props.inputParam.masterData[this.props.showMoreResetListName]
+                !== (previousProps.inputParam.masterData ? previousProps.inputParam.masterData[this.props.showMoreResetListName] : undefined)) {
+                this.setState({ allFieldExpanded: false, showList: null, showMore: {} });
+            }
+        }
+        if (this.props.masterList !== previousProps.masterList) {
+            this.updateScrollHeight(this.props, this.state)
+        }
+    }
+
+}
+
+
+export default connect(mapStateToProps, { dynamicFileDownload })(injectIntl(TransationListMasterJsonView));
+
+
+

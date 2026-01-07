@@ -1,0 +1,44 @@
+.k-spreadsheet .k-spreadsheet-sheets-bar .k-tabstrip-items {
+    /*fixes spacing before the tab */
+    margin-left: 0 !important;
+  }
+
+/* .k-link {
+    margin-right: 12px;
+} */
+
+/* .k-spreadsheet-sheets-items .k-item .k-spreadsheet-sheets-remove {
+    display: none;
+} */
+
+/* .k-spreadsheet-sheets-items .k-item .k-state-default .k-spreadsheet-sheets-bar-inactive {
+    display: none;
+} */
+
+/* .k-spreadsheet-sheets-bar-add{
+    display: none;
+} */
+
+.k-spreadsheet-action-bar {
+    display: none;
+}
+
+.k-spreadsheet {
+    width: 100%;
+}
+
+.k-list-container {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+/* .k-list .k-item.k-state-selected {
+    color: white;
+    text-decoration: none;
+    background-color: #002060;
+} */
+.k-list .k-item:hover {
+    color: white;
+    text-decoration: none;
+    background-color: #002060;
+  }

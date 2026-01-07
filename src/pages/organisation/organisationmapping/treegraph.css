@@ -1,0 +1,109 @@
+/* .node circle {
+	fill: rgb(247, 106, 214);
+	stroke: rgb(184, 37, 81);
+	stroke-width: 1.5px;
+}
+
+.node text {
+	font-size: 11px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: black;
+	fill: black;
+}
+
+.node {
+	cursor: pointer;
+}
+
+path.link {
+	fill: none;
+	stroke: #2593B8;
+	stroke-width: 1.5px;
+}
+
+body {
+	background-color: white;
+	overflow: hidden;
+}
+
+span {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #F4F4F4;
+	text-shadow: 0 1px 4px black;
+	float: right;
+} */
+
+
+svg.custom .node circle {
+	/* fill: #F3F3FF;
+	stroke: #2593B8; */
+	fill: rgb(247, 106, 214);
+	stroke: rgb(184, 37, 81);
+	stroke-width: 1.5px;
+}
+
+svg.custom .node text {
+	font-size: 9px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: black;
+	fill: black;
+}
+
+svg.custom .node {
+	cursor: pointer;
+}
+
+svg.custom path.link {
+	fill: none;
+	/* stroke: #2593B8; */
+	stroke:gray;
+	stroke-width: 1.5px;
+	
+}
+.selectedClass{
+	fill: #ED260E;
+	cursor: pointer;
+};
+
+.site1Class{
+	fill:red; 
+	/* fill :#000000; */
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.deptClass{
+	fill: purple;
+	/* fill :#000000; */
+	font-size: 12px;
+	cursor: pointer;
+}
+
+
+.labClass{
+	fill:#998308;
+	/* fill :#000000; */
+	font-size: 12px;
+	cursor: pointer;
+}
+
+
+.sectionClass{
+	fill:#5f59d9;
+	/* fill :#000000; */
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.userClass{
+	/* fill:rebeccapurple; */
+	fill :#000000;
+	font-size: 12px;
+}
+
+.siteClass{
+	fill: #09046b;
+	/* fill :#000000; */
+	font-size: 12px;
+	cursor: pointer;
+}

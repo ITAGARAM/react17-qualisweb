@@ -1,0 +1,21 @@
+/* ForbiddenPage.css */
+.forbidden-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #ffffff;
+    color: #315dbd;
+    text-align: center;
+  }
+  
+  .forbidden-container h1 {
+    font-size: 6rem;
+    margin: 0;
+  }
+  
+  .forbidden-container p {
+    font-size: 1.5rem;
+  }
+  

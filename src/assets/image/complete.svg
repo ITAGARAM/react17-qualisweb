@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="8px" height="7px" viewBox="0 0 8 7" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>complete</title>
+    <g id="Welcome" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Icons" transform="translate(-302.000000, -124.000000)" fill="#000000">
+            <path d="M304.85,128.25 L308.5,124.2 C308.6,124.05 308.85,124 309,124.15 L309.6,124.65 C309.75,124.8 309.75,125.05 309.6,125.2 L305.15,130.15 C305,130.3 304.75,130.3 304.6,130.15 L302.75,128.25 C302.6,128.1 302.6,127.9 302.75,127.75 L303.25,127.2 C303.35,127.15 303.4,127.1 303.55,127.1 C303.65,127.1 303.7,127.15 303.8,127.2 L304.85,128.25 Z" id="complete"></path>
+        </g>
+    </g>
+</svg>

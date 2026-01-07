@@ -1,0 +1,17 @@
+.ReactTags__remove{
+    border:0;
+    background: white;
+    font-size: 20px;
+    
+}
+.ReactTags__tag{
+    padding-right: 3px;
+}
+.ReactTags__tagInputField{
+    border:0;
+    outline:0;
+    width: 100%;
+}   
+.ReactTags__selected{
+    margin-top: 10px;
+}

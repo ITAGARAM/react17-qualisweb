@@ -1,0 +1,25 @@
+.save__controls {
+    position: absolute;
+    right: 10px;
+    top: 100px;
+    z-index: 4;
+    font-size: 14px;      
+  }
+  
+  .save__controls button {
+    margin-left: 5px;
+    border-radius: 5px;
+    color: white;
+    border-color: blue;
+    background-color: blue;
+  }
+
+  /* .react-flow__attribution.top {
+    top: 0;
+    visibility:hidden
+} */
+
+.react-flow__attribution{
+    display: none !important;
+}
+  

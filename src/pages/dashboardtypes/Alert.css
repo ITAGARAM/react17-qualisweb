@@ -1,0 +1,58 @@
+
+.the-wrapper {
+    position: relative;
+    /* padding-left: 45px; */
+  }
+  
+  .the-wrapper .icon {
+    position: absolute;
+    /* width: 67%; */
+    /* height: 100%;
+    display: flex; */
+    align-items: center;
+    justify-content: center;
+  }
+  .badge {
+    display: inline-block; 
+    padding: .25em .4em !important;
+    /* font-size: 40%; */
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.badge-pill {
+    /* padding-right: .5em;
+    padding-left: .5em; */
+    padding: .3em;
+    border-radius: 10rem;
+}
+
+.alerticon{
+    display: flex;
+    align-items: center;
+    margin-right: .5rem;
+    cursor: pointer;
+}
+.fa-chart-pie {
+    font-size: 1.5rem;
+    color: #2883fe;
+}
+.fa_stack{
+display: inline-block;
+line-height: 0;
+position: relative;
+left: -3px;
+right: 4rem;
+}
+.icon_Badge{
+left: 13px;
+top: 7px;
+font-size: 0.8rem;
+}
+.icon_Badge .badge{
+  width: auto;
+}

@@ -1,0 +1,48 @@
+.media-profileinfo {
+    width: 80px;
+    overflow: hidden;
+    margin-right: 4px;
+    margin-top: 5px;
+}
+.zoom {
+transition: transform .8s;
+transform-origin: top 10%;
+}
+.zoom:hover {
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Safari 3-8 */
+  transform: scale(1.2); 
+}
+.rounded-circle{
+  border-style: double !important;
+  border-top-color: #e4e7eb;
+  border-top-style: solid;
+  border-right-color: #e4e7eb;
+  border-bottom-color: #e4e7eb;
+  border-left-color: #e4e7eb;
+   box-shadow: 0px 4px 6px rgb(0 0 0 / 15%),
+  0px 0px 2px rgb(0 0 0 / 15%)
+}
+.login-text{
+  min-height: 80px;
+}
+.aliquot-table td{
+    font-size: 13px;
+    height: 13px; /* reduce row height */
+    vertical-align: middle;
+}
+.aliquot-table th {
+    padding: 4px 8px !important;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.aliquot-table input {
+    padding: 2px 4px;
+    font-size: 13px;
+}
+
+.aliquot-table .action-icons-wrap {
+    padding: 2px;
+    text-align: center;
+}

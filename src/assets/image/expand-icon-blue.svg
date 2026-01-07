@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="17px" height="10px" viewBox="0 0 17 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>expand-3</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="expand-3" transform="translate(-0.000000, 0.000000)" fill="#0e5bca" fill-rule="nonzero">
+            <path d="M0,9.81818182 L13,9.81818182 L13,8.54545455 L0,8.54545455 L0,9.81818182 Z M0,5.54545455 L10,5.54545455 L10,4.27272727 L0,4.27272727 L0,5.54545455 Z M0,7.10542736e-15 L0,1.27272727 L13,1.27272727 L13,7.10542736e-15 L0,7.10542736e-15 Z M16.1818182,2.71545455 L13.9036364,5 L16.1818182,7.28454545 L15.2845455,8.18181818 L12.1027273,5 L15.2845455,1.81818182 L16.1818182,2.71545455 Z" id="Shape" transform="translate(8.090909, 4.909091) rotate(180.000000) translate(-8.090909, -4.909091) "></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,85 @@
+.columnResizer {
+  background-color: red;
+  width: 6px;
+}
+/*.tag-wrapper .ReactTags__remove:before{
+        content: '\e805';
+}*/
+.react-tags-wrapper{
+  border-bottom:1px solid rgba(192, 198, 206, 0.46);
+  min-height:22px;
+  padding-bottom: 2px;
+}
+.selected label{
+  color: #212529;
+}
+.selected .dropdoen-wrap{
+top: 18px !important;
+}   
+.selected.custom-column-wrap{
+     margin-top: 5px;
+}
+.selected .react-tags-wrapper{
+padding-bottom: 5px;
+}
+ .custom-fa-angle-down .tag-wrapper a:before , .custom-fa-angle-down .tag-wrapper .ReactTags__remove:before {
+    content: "" !important;
+    height: 13px;
+    background: no-repeat  url('../../assets/image/times-solid.svg');
+    width: 13px;
+    display: block;
+    opacity: .5;
+    top:0!important;
+}
+.listed .tag-wrapper a , .listed .tag-wrapper .ReactTags__remove:before{
+  opacity: 1;
+}
+.custom-fa-angle-down .tag-wrapper a , .custom-fa-angle-down .tag-wrapper .ReactTags__remove{
+  background: transparent;
+  border: none;
+  color: transparent;
+      right: 40px;
+    position: absolute;
+    top: 3px;
+    outline: none !important;
+}
+
+.custom-fa-angle-down .fa-angle-up{
+    background: no-repeat  url('../../assets/image/chevron-down-solid.svg') !important;
+}
+.custom-fa-angle-down .fa-angle-down{
+
+	 background: no-repeat  url('../../assets/image/chevron-up-solid.svg') !important;
+}
+.compo-table{
+  background: #fff;
+}
+.custom-column-wrap .ReactTags__selected{
+  padding-right: 65px;
+      padding-top: 5px;
+    padding-left: 2px;
+
+}
+.custom-column-wrap.disabled .dropdown-wrap , .custom-column-wrap.disabled .tag-wrapper ,.custom-column-wrap.disabled .react-tags-wrapper{
+      background-color: hsl(0,0%,95%) !important;
+      color: hsl(0,0%,60%) !important;
+      position: relative;
+} 
+.custom-column-wrap .form-label {
+  display: inline-block;
+    background: #fff;
+    padding: 0 3px 0 0;
+    /* z-index: 999; */
+    position: relative;
+    border-radius: 5px;
+}
+.custom-column-wrap.disabled:before{
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  content: "";
+      z-index: 999;
+    cursor: not-allowed;
+}

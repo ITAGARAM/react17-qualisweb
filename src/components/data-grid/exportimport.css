@@ -1,0 +1,111 @@
+.InputGroupSplit {
+    background: none;
+    border: 0;
+}
+
+.ActionIconColor {
+    border-color: #bbc2cb;
+    color: #d1d5dd;
+}
+
+.left-card {
+    left: 83% !important
+}
+
+.custom-padding {
+    padding: 0.85rem 1rem !important;
+}
+
+.img-normalize{
+    opacity: 0.4;
+    margin: 0 5px;
+}
+
+.action-icons-wrap>img:hover{
+   filter: invert(22%) sepia(33%) saturate(6740%) hue-rotate(210deg) brightness(95%) contrast(89%);
+    opacity: 1;
+}
+.action-icons-wrap>img.active{
+    filter: invert(22%) sepia(33%) saturate(6740%) hue-rotate(210deg) brightness(95%) contrast(89%);
+    opacity: 1;
+}
+
+.ExportIconColor {
+    border-color: #272626;
+    color: #555050;
+    
+}
+
+.img{
+    opacity: 0.4;
+    margin-right: 10px;
+    
+}
+
+.merge{
+    opacity: 0.4;
+    margin-left: 10px;
+    
+}
+
+ /* .merge:hover {
+    color: #0e5bca;
+} */
+
+.merge:hover {
+     color: rgb(0, 60, 128);
+    --background-primary: #1268e3;
+    --background-primary-active: #0e5bca;
+    --border-primary: #eff1f4;;
+}
+.img:hover {
+    color: var(--background-primary-active);
+    cursor: pointer;
+    
+}
+
+:root {
+    --background-primary: #1268e3;
+    --background-primary-active: #0e5bca;
+    --border-primary: #eff1f4;
+}
+
+.merge.svg-inline--fa:hover {
+    color: var(--background-primary-active);
+    cursor: pointer;
+}
+
+.merge.svg-inline--fa:hover {
+    color: #0e5bca;
+}
+
+.action-icons-wraps.svg-inline--fa:hover {
+    color: #0e5bca;
+}
+
+.action-icons-wraps:hover .svg-inline--fa {
+    color: var(--background-primary-active) !important;
+    cursor: pointer;
+}
+
+.action-icons-wraps:hover .svg-inline--fa {
+    color: var(--background-primary-active) !important;
+    cursor: pointer;
+}
+
+.action-icons-wrap1>img:hover{
+    filter: invert(22%) sepia(33%) saturate(6740%) hue-rotate(210deg) brightness(95%) contrast(89%);    
+     opacity: 0.4;
+     margin-left: 6em;
+ }
+ .action-icons-wrap1>img.active{
+     filter: invert(22%) sepia(33%) saturate(6740%) hue-rotate(210deg) brightness(95%) contrast(89%);
+     opacity: 0.4;
+     margin-left: 6em;
+ }
+
+ .d-font-icon1+.d-font-icon1 {
+    margin-left: 6em;
+    height: 0em;
+   
+}

@@ -1,0 +1,64 @@
+.table-wrapper {
+  max-height: 80vh; /* Fixed height */
+  overflow-y: auto;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  margin-top: 1px;
+}
+
+.sticky-table {
+  min-width: 1350px; /* Forces horizontal scroll if needed */ 
+  font-size:11px; 
+  scrollbar-width: thin;
+}
+
+.sticky-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f2f2f2;
+    z-index: 2;
+    border-bottom: 1px solid #dee2e6;
+    height: 43px;
+    padding: 0;
+}
+
+.sticky-table td{
+  font-size: 11px;
+  padding: 4px;
+  vertical-align: middle;
+}
+
+.sticky-table .form-group.floating-label{
+  margin-bottom: 0;
+}
+
+.sticky-table .attachment-title{
+  font-size: 12px;
+      width: 100px;
+    word-break: break-all;
+}
+
+.sticky-table .dropzone{
+  width: 168px;
+    height: 40px;
+    min-height: 40px !important;
+    margin-top: 0 !important;
+}
+
+.sticky-table .floating-label .form-control, .sticky-table .floating-label .react-select__control{
+  font-size: 11px;
+}
+
+.sticky-table .svg-inline--fa.fa-w-12 {
+    width: 15px;
+}
+
+.sticky-table .form-group{
+  margin-bottom: 5px;
+}
+
+.calculate-formula{
+  position: absolute;
+  top: 0px;
+  right: 0;
+}

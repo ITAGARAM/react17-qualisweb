@@ -1,0 +1,91 @@
+{
+    "patientmaster.sfirstname":{
+        "label":"First Name",
+        "type": "text",
+        "valueSources": ["value","func"],
+
+        "mainWidgetProps": {
+            "valueLabel": "Name",
+            "valuePlaceholder": "Enter First Name"
+          }
+
+    },
+    "patientmaster.slastname":{
+        "label":"Last Name",
+        "type": "text",
+        "valueSources": ["value","func"],
+        "mainWidgetProps": {
+            "valueLabel": "Name",
+            "valuePlaceholder": "Enter Last Name"
+            
+          }
+        },
+        "patientmaster.spatientid":{
+            "label":"Patient Id",
+            "type": "text",
+            "valueSources": ["value","func"],
+            "mainWidgetProps": {
+                "valueLabel": "Name",
+                "valuePlaceholder": "Enter Patient Id"
+                
+              }
+            },
+        "patientmaster.snationalid":{
+            "label":"National Id",
+            "type": "text",
+            "valueSources": ["value","func"],
+            "mainWidgetProps": {
+                "valueLabel": "Name",
+                "valuePlaceholder": "Enter National Id"
+                
+              }
+        },
+        "patientmaster.sfathername":{
+            "label":"Father/Gaurdian Name",
+            "type": "text",
+            "valueSources": ["value","func"],
+            "mainWidgetProps": {
+                "valueLabel": "Name",
+                "valuePlaceholder": "Enter Father Name"
+                
+              }
+        },
+    "patientmaster.ddob":{
+        "label": "Date of Birth",
+       "type": "date",
+       "valueSources": ["value"]
+    },
+      "patientmaster.ngendercode": {
+        "label": "Sex",
+        "type": "select",
+        "valueSources": ["value"],
+        "fieldSettings": {
+          "listValues": [
+            { "value": "1", "title": "Male" },
+            { "value": "2", "title": "Female" },
+            { "value": "3", "title": "Others" }
+          ]
+        }
+      },
+      "patientmaster.saddress":{
+        "label":"Address",
+        "type": "text",
+        "valueSources": ["value","func"],
+        "mainWidgetProps": {
+            "valueLabel": "Name",
+            "valuePlaceholder": "Enter Address"
+            
+          }
+    },
+    "patientmaster.sphoneno": {
+        "label": "Phone No",
+        "type": "text",
+        "valueSources": ["value"],
+        "fieldSettings": {
+          "min": 0,
+          "valuePlaceholder": "Enter Phoneno"
+
+        }
+      }
+}
+

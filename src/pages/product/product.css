@@ -1,0 +1,30 @@
+.InputGroupSplit {
+    background: none;
+    border: 0;
+}
+
+.ActionIconColor {
+    border-color: #bbc2cb;
+    color: #d1d5dd;
+}
+
+.left-card {
+    left: 83% !important
+}
+
+.custom-padding {
+    padding: 0.85rem 1rem !important;
+}
+
+.img-normalize{
+    opacity: 0.4;
+}
+
+.action-icons-wrap>img:hover{
+   filter: invert(22%) sepia(33%) saturate(6740%) hue-rotate(210deg) brightness(95%) contrast(89%);
+    opacity: 1;
+}
+.action-icons-wrap>img.active{
+    filter: invert(22%) sepia(33%) saturate(6740%) hue-rotate(210deg) brightness(95%) contrast(89%);
+    opacity: 1;
+}

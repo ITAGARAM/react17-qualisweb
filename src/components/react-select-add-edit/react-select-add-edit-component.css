@@ -1,0 +1,103 @@
+.parent_select_search_custom .select_search_custom .react-select__control{
+    border: none;
+    outline: none !important;
+    box-shadow: none !important;
+    margin-top: -5px
+}
+.parent_select_search_custom .select_search_custom{ 
+    border-bottom: 1px solid rgba(192, 198, 206, 0.46);
+}
+.parent_select_search_custom > label{
+    margin-top: -15px;
+    margin-bottom: 0;
+}
+.parent_select_search_custom .react-select__placeholder,.parent_select_search_custom .react-select__single-value{
+    font-weight: 600;
+}
+.parent_select_search_custom .react-select__value-container{
+    padding: 0 !important;
+}
+.parent_select_search_custom .react-select__indicator-separator{
+    display: none;
+}
+.parent_select_search_custom .react-select__indicator{
+    padding: 5px !important;
+}
+.parent_select_search_custom .react-select__indicator svg{
+    height: 18px;
+    width: 18px;
+}
+.parent_select_search_custom{
+    margin-bottom: 2rem;
+    position: relative;
+}
+.parent_select_search_custom .list-group {
+    max-height: 300px;
+    overflow: auto;
+    position: absolute;
+    z-index: 9;
+    background: #fff;
+    display: none;
+    width:100%;
+        box-shadow: 0px 2px 4px 2px rgba(0,0,0,0.05);
+-webkit-box-shadow: 0px 2px 4px 2px rgba(0,0,0,0.05);
+-moz-box-shadow: 0px 2px 4px 2px rgba(0,0,0,0.05);
+}
+.parent_select_search_custom.active-list .list-group{
+    display: block;
+}
+.parent_select_search_custom .react-select__menu{
+    z-index: 99
+}
+.regular-input i{
+        position: absolute;
+    right: 9px;
+    z-index: 99;
+    bottom: 15px;
+        color: #505f79;
+        cursor: pointer;
+        font-size: 12px;
+}
+.regular-input input{
+    border: none;
+    border-bottom: 1px solid rgba(192, 198, 206, 0.46);
+    padding-left: 0;
+    padding-right: 15px;
+        color: #505f79;
+    font-weight: 600;
+    border-radius: 0;
+    height: 34px; 
+    padding-right: 27px;
+}
+.regular-input input:focus{
+    outline: none;
+    border-color: rgba(192, 198, 206, 0.46);
+    box-shadow: none;
+}
+.regular-input input:focus + svg path{
+    fill: #212529;
+}
+.regular-input-list{
+    border: 1px solid rgba(192, 198, 206, 0.46);
+}
+.regular-input-list .list-group-item{
+    border: none;
+    color: #3a3c40;
+    padding: 8px 13px;
+    font-size: 16px;
+}
+.regular-input-list .list-group-item:hover{
+    background: #deebff;
+}
+.regular-input{
+    position: relative;
+}
+.regular-input .input_ico  path{
+    fill: #ccc;
+}
+.regular-input .input_ico {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 12px;
+}

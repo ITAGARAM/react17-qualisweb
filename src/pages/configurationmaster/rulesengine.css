@@ -1,0 +1,56 @@
+.remove-floating-label-margin {
+    margin-bottom: 0rem !important;
+}
+
+.rulesengine-btn-primary {
+    color: #fff;
+    border-color: #0d2d4b;
+    background: #632851;
+}
+
+.rulesengine-condition-btn {
+    padding-left: 80px;
+}
+.notbtn.rulesengine-condition-btn { 
+    padding-left: 90px;
+}
+.rulesengine-rule-btn {
+   position: absolute;
+}
+.margin-top-negative-1{
+    margin-top: -15px;
+    margin-bottom: -15px;
+}
+.vertical-tab-top.popup .tab-head li span {
+    white-space: normal;
+}
+.iROaws {
+    margin-left: 0rem;
+    height: auto !important;
+    padding: 0.375rem 0.75rem !important;
+}
+.eojExF {
+    height: auto !important;
+    padding: 0.375rem 0.75rem !important;
+}
+.hyvumM{
+    order:100;
+    margin-left: 0 !important;
+    cursor: pointer;
+}
+.popup-fixed-center-headed-full-width {
+    height: calc(100vh - 282px) !important;
+    overflow: auto;
+}
+.hdiJSF{
+    background:#f8f9fa!important;
+}
+.rules-engine .vertical-tab .k-widget.k-grid {
+    height: calc(100vh - 454px) !important;
+}
+.vertical-tab-top.popup .vertical-tab-content > div > div {
+    display: block;
+}
+.rules-engine .vertical-tab.active{
+    width: 50% !important;
+}

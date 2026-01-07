@@ -1,0 +1,9 @@
+.remove-floating-label-margin {
+    margin-bottom: 0rem !important;
+}
+
+.builder-btn-primary {
+    color: #fff;
+    border-color: #1890ff;
+    background: #1890ff;
+}
